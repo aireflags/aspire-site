@@ -1,0 +1,7 @@
+{
+  "name": "Alex Brokerage Enterprise",
+  "description": "A sophisticated enterprise dashboard for senior brokers featuring AI-powered market insights and integrated client management tools.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
