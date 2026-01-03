@@ -14,8 +14,8 @@ const Home: React.FC = () => {
             style={{ backgroundImage: 'url("https://picsum.photos/seed/alex/100/100")' }}
           />
           <div className="flex flex-col">
-            <h2 className="text-white text-lg font-bold leading-tight">Good morning, Alex</h2>
-            <p className="text-[#9dabb9] text-sm font-medium">Senior Broker</p>
+            <h2 className="text-white text-lg font-bold leading-tight">Good morning, Liz</h2>
+            <p className="text-[#9dabb9] text-sm font-medium">Newbie Agent</p>
           </div>
         </div>
         <button className="flex items-center justify-center rounded-full size-10 hover:bg-[#283039] transition-colors relative">
