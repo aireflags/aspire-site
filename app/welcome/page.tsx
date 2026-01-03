@@ -6,12 +6,9 @@ import { useSearchParams } from 'next/navigation'
 function WelcomeContent() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/home'
-
-  const handleGoogleSignIn = () => {
-    // 直接跳转到 NextAuth 的 Google 登录 URL
-    const signInUrl = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
-    window.location.href = signInUrl
-  }
+  
+  // 直接使用链接，这是最可靠的方式
+  const signInUrl = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900 max-w-md mx-auto items-center justify-center px-6">
@@ -25,9 +22,9 @@ function WelcomeContent() {
           </p>
         </div>
 
-        <button
-          onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-colors shadow-sm"
+        <a
+          href={signInUrl}
+          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-colors shadow-sm no-underline"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -48,7 +45,7 @@ function WelcomeContent() {
             />
           </svg>
           <span className="text-gray-900 font-semibold">使用 Google 登录</span>
-        </button>
+        </a>
 
         <p className="text-sm text-gray-400 mt-4">
           使用 Google 账户登录（支持 Gmail 和企业邮箱）
