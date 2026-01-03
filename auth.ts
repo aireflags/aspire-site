@@ -8,24 +8,36 @@ const ALLOWED_EMAIL_DOMAINS = [
   "ratednagroup.com"
 ]
 
-// 验证必需的环境变量
-if (!process.env.AUTH_SECRET) {
+// 验证必需的环境变量（在构建时和运行时都会检查）
+const AUTH_SECRET = process.env.AUTH_SECRET
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
+
+if (!AUTH_SECRET) {
   console.error('❌ AUTH_SECRET 环境变量未设置')
+  console.error('   请确保在 Vercel 项目设置中添加 AUTH_SECRET 环境变量')
 }
 
-if (!process.env.GOOGLE_CLIENT_ID) {
+if (!GOOGLE_CLIENT_ID) {
   console.error('❌ GOOGLE_CLIENT_ID 环境变量未设置')
+  console.error('   请确保在 Vercel 项目设置中添加 GOOGLE_CLIENT_ID 环境变量')
 }
 
-if (!process.env.GOOGLE_CLIENT_SECRET) {
+if (!GOOGLE_CLIENT_SECRET) {
   console.error('❌ GOOGLE_CLIENT_SECRET 环境变量未设置')
+  console.error('   请确保在 Vercel 项目设置中添加 GOOGLE_CLIENT_SECRET 环境变量')
+}
+
+// 如果缺少任何必需的环境变量，在开发环境中抛出错误
+if (process.env.NODE_ENV === 'development' && (!AUTH_SECRET || !GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET)) {
+  console.error('⚠️  缺少必需的环境变量，NextAuth 可能无法正常工作')
 }
 
 export const authConfig: NextAuthConfig = {
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      clientId: GOOGLE_CLIENT_ID || '',
+      clientSecret: GOOGLE_CLIENT_SECRET || '',
     }),
   ],
   callbacks: {
@@ -75,7 +87,7 @@ export const authConfig: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.AUTH_SECRET,
+  secret: AUTH_SECRET,
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
