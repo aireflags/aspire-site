@@ -1,19 +1,16 @@
 'use client'
 
 import { Suspense } from 'react'
-import { signIn } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 
 function WelcomeContent() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/home'
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signIn('google', { callbackUrl, redirect: true })
-    } catch (error) {
-      console.error('Sign in error:', error)
-    }
+  const handleGoogleSignIn = () => {
+    // 直接跳转到 NextAuth 的 Google 登录 URL
+    const signInUrl = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
+    window.location.href = signInUrl
   }
 
   return (
