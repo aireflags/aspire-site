@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ToolItem } from '../types';
+import { ToolItem } from '@/types';
 
 interface ToolCardProps {
   tool: ToolItem;

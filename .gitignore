@@ -22,4 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.vite
+.viteApp.tsx.old.backup
+index.tsx.old.backup
+components.old.backup/
+App.tsx.old.backup
+index.tsx.old.backup
+components.old.backup/
+pages.old.backup/
+.next/
+.vite/
