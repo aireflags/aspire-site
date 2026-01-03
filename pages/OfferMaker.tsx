@@ -1,9 +1,7 @@
 
 import React from 'react';
-import { ENTERPRISE_TOOLS } from '../constants';
-import ToolCard from '../components/ToolCard';
 
-const Home: React.FC = () => {
+const OfferMaker: React.FC = () => {
   return (
     <div className="flex flex-col">
       {/* Header */}
@@ -25,19 +23,20 @@ const Home: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <div className="px-4">
-        <div className="pt-4 pb-3">
-          <h1 className="text-gray-900 text-[22px] font-bold leading-tight tracking-tight">Enterprise Tools</h1>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {ENTERPRISE_TOOLS.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
-          ))}
+      <div className="px-4 py-8">
+        <div className="text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-primary/10 rounded-full p-4">
+              <span className="material-symbols-outlined text-primary text-4xl">chat_bubble</span>
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Offer Maker</h1>
+          <p className="text-gray-500">Coming soon...</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default OfferMaker;
+

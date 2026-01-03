@@ -42,20 +42,20 @@ const AspireAI: React.FC = () => {
   return (
     <div className="flex flex-col">
       {/* Header - Greeting and Notification */}
-      <header className="flex items-center justify-between p-4 pb-2 bg-background-dark sticky top-0 z-10 backdrop-blur-sm">
+      <header className="flex items-center justify-between p-4 pb-2 bg-white sticky top-0 z-10 backdrop-blur-sm border-b border-gray-200">
         <div className="flex items-center gap-4">
           <div 
-            className="bg-center bg-no-repeat bg-cover rounded-full size-12 border-2 border-[#3b4754]" 
+            className="bg-center bg-no-repeat bg-cover rounded-full size-12 border-2 border-gray-200" 
             style={{ backgroundImage: 'url("https://picsum.photos/seed/alex/100/100")' }}
           />
           <div className="flex flex-col">
-            <h2 className="text-white text-lg font-bold leading-tight">Good morning, Liz</h2>
-            <p className="text-[#9dabb9] text-sm font-medium">Newbie Agent</p>
+            <h2 className="text-gray-900 text-lg font-bold leading-tight">Good morning, Liz</h2>
+            <p className="text-gray-500 text-sm font-medium">Newbie Agent</p>
           </div>
         </div>
-        <button className="flex items-center justify-center rounded-full size-10 hover:bg-[#283039] transition-colors relative">
-          <span className="material-symbols-outlined text-white text-2xl">notifications</span>
-          <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-background-dark"></span>
+        <button className="flex items-center justify-center rounded-full size-10 hover:bg-gray-100 transition-colors relative">
+          <span className="material-symbols-outlined text-gray-900 text-2xl">notifications</span>
+          <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
       </header>
 
@@ -67,7 +67,7 @@ const AspireAI: React.FC = () => {
         {messages.length === 0 && (
           <div className="py-8 space-y-4">
             <div className="text-center mb-6">
-              <p className="text-[#9dabb9] text-sm mb-2">Get started with these common questions:</p>
+              <p className="text-gray-500 text-sm mb-2">Get started with these common questions:</p>
             </div>
             <div className="space-y-3">
               {commonQuestions.map((question, index) => (
@@ -75,9 +75,9 @@ const AspireAI: React.FC = () => {
                   key={index}
                   onClick={() => handleSend(question)}
                   disabled={isProcessing}
-                  className="w-full text-left p-4 rounded-xl bg-[#1c2127] border border-[#3b4754] hover:bg-[#283039] hover:border-primary/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full text-left p-4 rounded-xl bg-white border border-gray-200 hover:bg-gray-50 hover:border-primary/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <p className="text-white text-sm font-medium">{question}</p>
+                  <p className="text-gray-900 text-sm font-medium">{question}</p>
                 </button>
               ))}
             </div>
@@ -88,7 +88,7 @@ const AspireAI: React.FC = () => {
             <div className={`max-w-[85%] px-4 py-2 rounded-2xl text-sm ${
               m.role === 'user' 
               ? 'bg-primary text-white rounded-tr-none' 
-              : 'bg-[#283039] text-white rounded-tl-none'
+              : 'bg-gray-100 text-gray-900 rounded-tl-none'
             }`}>
               {m.content}
             </div>
@@ -96,7 +96,7 @@ const AspireAI: React.FC = () => {
         ))}
         {isProcessing && (
           <div className="flex justify-start">
-            <div className="bg-[#283039] px-4 py-2 rounded-2xl text-sm rounded-tl-none flex gap-1">
+            <div className="bg-gray-100 px-4 py-2 rounded-2xl text-sm rounded-tl-none flex gap-1">
               <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"></div>
               <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.2s]"></div>
               <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.4s]"></div>
@@ -107,13 +107,13 @@ const AspireAI: React.FC = () => {
       </div>
 
       {/* Input Field at bottom */}
-      <div className="fixed bottom-16 left-0 right-0 max-w-md mx-auto z-40 px-4 pb-2 bg-background-dark/80 backdrop-blur-md">
-        <div className="bg-[#1c2127] border border-[#3b4754] rounded-xl shadow-lg p-2 flex items-center gap-2">
+      <div className="fixed bottom-16 left-0 right-0 max-w-md mx-auto z-40 px-4 pb-2 bg-white/80 backdrop-blur-md">
+        <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-2 flex items-center gap-2">
           <div className="flex items-center justify-center rounded-full bg-primary/10 text-primary w-8 h-8 shrink-0">
             <span className="material-symbols-outlined text-sm font-bold">auto_awesome</span>
           </div>
           <input 
-            className="bg-transparent border-none focus:ring-0 text-white text-base flex-1 min-w-0 placeholder-[#9dabb9]" 
+            className="bg-transparent border-none focus:ring-0 text-gray-900 text-base flex-1 min-w-0 placeholder-gray-400" 
             placeholder="Welcome! How can I help you today?" 
             type="text"
             value={input}
@@ -121,14 +121,14 @@ const AspireAI: React.FC = () => {
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
           <div className="flex items-center gap-1">
-            <button className="p-2 text-[#9dabb9] hover:bg-[#283039] rounded-full transition-colors">
+            <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
               <span className="material-symbols-outlined text-[20px]">mic</span>
             </button>
             <button 
               onClick={() => handleSend()}
               disabled={isProcessing || !input.trim()}
               className={`flex items-center justify-center h-8 px-3 rounded-lg text-white text-sm font-bold shadow transition-colors ${
-                isProcessing || !input.trim() ? 'bg-gray-600 cursor-not-allowed' : 'bg-primary hover:bg-blue-600'
+                isProcessing || !input.trim() ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-blue-600'
               }`}
             >
               {isProcessing ? '...' : 'Send'}
