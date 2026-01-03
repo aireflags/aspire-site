@@ -9,7 +9,7 @@ export default function BottomNav() {
   const navItems = [
     { path: '/home', icon: 'home', label: 'Home' },
     { path: '/aspireAI', icon: 'auto_awesome', label: 'AspireAI' },
-    { path: '/offerMaker', icon: 'chat_bubble', label: 'OfferMate' },
+    { path: '/offerMaker', icon: 'edit_note', label: 'OfferMate' },
     { path: '/settings', icon: 'settings', label: 'Settings' },
   ]
 

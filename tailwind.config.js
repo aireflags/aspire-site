@@ -9,11 +9,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#137fec',
+        primary: '#135bec',
         background: {
-          light: '#f6f7f8',
-          dark: '#0a0f14'
+          light: '#ffffff',
+          dark: '#101622'
         },
+        'background-light': '#ffffff',
+        'background-dark': '#101622',
+        'surface-dark': '#1c2533',
+        'border-dark': '#324467',
         card: {
           light: '#ffffff',
           dark: '#1c2127'
@@ -21,6 +25,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Manrope', 'sans-serif'],
+        display: ['Manrope', 'sans-serif'],
       },
     },
   },
