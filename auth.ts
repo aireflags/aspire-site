@@ -8,11 +8,24 @@ const ALLOWED_EMAIL_DOMAINS = [
   "ratednagroup.com"
 ]
 
+// 验证必需的环境变量
+if (!process.env.AUTH_SECRET) {
+  console.error('❌ AUTH_SECRET 环境变量未设置')
+}
+
+if (!process.env.GOOGLE_CLIENT_ID) {
+  console.error('❌ GOOGLE_CLIENT_ID 环境变量未设置')
+}
+
+if (!process.env.GOOGLE_CLIENT_SECRET) {
+  console.error('❌ GOOGLE_CLIENT_SECRET 环境变量未设置')
+}
+
 export const authConfig: NextAuthConfig = {
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
   ],
   callbacks: {

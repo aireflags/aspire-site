@@ -6,9 +6,20 @@ import { useSearchParams } from 'next/navigation'
 function WelcomeContent() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/home'
+  const error = searchParams.get('error')
   
   // 直接使用链接，这是最可靠的方式
   const signInUrl = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
+
+  // 错误消息映射
+  const errorMessages: Record<string, string> = {
+    Configuration: '配置错误：请检查环境变量设置（AUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET）',
+    AccessDenied: '访问被拒绝：您的邮箱域名不在允许列表中',
+    Verification: '验证失败：请重试',
+    Default: '登录失败：请稍后重试'
+  }
+
+  const errorMessage = error ? (errorMessages[error] || errorMessages.Default) : null
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900 max-w-md mx-auto items-center justify-center px-6">
@@ -21,6 +32,17 @@ function WelcomeContent() {
             Sign in with your company email to continue
           </p>
         </div>
+
+        {errorMessage && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800 text-sm font-medium">⚠️ {errorMessage}</p>
+            {error === 'Configuration' && (
+              <p className="text-red-600 text-xs mt-2">
+                请在 Vercel 项目设置中添加必需的环境变量
+              </p>
+            )}
+          </div>
+        )}
 
         <a
           href={signInUrl}
