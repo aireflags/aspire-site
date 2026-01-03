@@ -1,12 +1,39 @@
 'use client'
 
-import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 function WelcomeContent() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const callbackUrl = searchParams.get('callbackUrl') || '/home'
   const error = searchParams.get('error')
+  const [configStatus, setConfigStatus] = useState<{ isValid: boolean; loading: boolean }>({ isValid: false, loading: true })
+  
+  // 检查配置状态
+  useEffect(() => {
+    async function checkConfig() {
+      try {
+        const response = await fetch('/api/auth/providers')
+        const data = await response.json()
+        const isValid = data.status === 'ok' && data.allSet
+        
+        setConfigStatus({ isValid, loading: false })
+        
+        // 如果配置已正确，但 URL 中仍有 Configuration 错误，清除错误参数
+        if (isValid && error === 'Configuration') {
+          const newUrl = new URL(window.location.href)
+          newUrl.searchParams.delete('error')
+          router.replace(newUrl.pathname + newUrl.search)
+        }
+      } catch (err) {
+        console.error('Failed to check config:', err)
+        setConfigStatus({ isValid: false, loading: false })
+      }
+    }
+    
+    checkConfig()
+  }, [error, router])
   
   // 直接使用链接，这是最可靠的方式
   const signInUrl = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
@@ -19,7 +46,9 @@ function WelcomeContent() {
     Default: '登录失败：请稍后重试'
   }
 
-  const errorMessage = error ? (errorMessages[error] || errorMessages.Default) : null
+  // 只有在配置确实有问题时才显示错误
+  const shouldShowError = error && !(error === 'Configuration' && configStatus.isValid)
+  const errorMessage = shouldShowError ? (errorMessages[error!] || errorMessages.Default) : null
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900 max-w-md mx-auto items-center justify-center px-6">

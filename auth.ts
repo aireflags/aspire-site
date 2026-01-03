@@ -9,37 +9,50 @@ const ALLOWED_EMAIL_DOMAINS = [
 ]
 
 // 验证必需的环境变量（在构建时和运行时都会检查）
-const AUTH_SECRET = process.env.AUTH_SECRET
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
+const AUTH_SECRET = process.env.AUTH_SECRET?.trim()
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID?.trim()
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET?.trim()
 
-if (!AUTH_SECRET) {
-  console.error('❌ AUTH_SECRET 环境变量未设置')
+// 检查环境变量是否存在且非空
+const hasAuthSecret = !!AUTH_SECRET && AUTH_SECRET.length > 0
+const hasGoogleClientId = !!GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID.length > 0
+const hasGoogleClientSecret = !!GOOGLE_CLIENT_SECRET && GOOGLE_CLIENT_SECRET.length > 0
+
+if (!hasAuthSecret) {
+  console.error('❌ AUTH_SECRET 环境变量未设置或为空')
   console.error('   请确保在 Vercel 项目设置中添加 AUTH_SECRET 环境变量')
 }
 
-if (!GOOGLE_CLIENT_ID) {
-  console.error('❌ GOOGLE_CLIENT_ID 环境变量未设置')
+if (!hasGoogleClientId) {
+  console.error('❌ GOOGLE_CLIENT_ID 环境变量未设置或为空')
   console.error('   请确保在 Vercel 项目设置中添加 GOOGLE_CLIENT_ID 环境变量')
 }
 
-if (!GOOGLE_CLIENT_SECRET) {
-  console.error('❌ GOOGLE_CLIENT_SECRET 环境变量未设置')
+if (!hasGoogleClientSecret) {
+  console.error('❌ GOOGLE_CLIENT_SECRET 环境变量未设置或为空')
   console.error('   请确保在 Vercel 项目设置中添加 GOOGLE_CLIENT_SECRET 环境变量')
 }
 
-// 如果缺少任何必需的环境变量，在开发环境中抛出错误
-if (process.env.NODE_ENV === 'development' && (!AUTH_SECRET || !GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET)) {
+// 如果缺少任何必需的环境变量，记录警告
+if (!hasAuthSecret || !hasGoogleClientId || !hasGoogleClientSecret) {
   console.error('⚠️  缺少必需的环境变量，NextAuth 可能无法正常工作')
 }
 
-export const authConfig: NextAuthConfig = {
-  providers: [
+// 只有在所有环境变量都存在时才配置 Google provider
+const providers = []
+if (hasGoogleClientId && hasGoogleClientSecret) {
+  providers.push(
     Google({
-      clientId: GOOGLE_CLIENT_ID || '',
-      clientSecret: GOOGLE_CLIENT_SECRET || '',
-    }),
-  ],
+      clientId: GOOGLE_CLIENT_ID!,
+      clientSecret: GOOGLE_CLIENT_SECRET!,
+    })
+  )
+} else {
+  console.error('⚠️  Google provider 未配置：缺少 GOOGLE_CLIENT_ID 或 GOOGLE_CLIENT_SECRET')
+}
+
+export const authConfig: NextAuthConfig = {
+  providers,
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider === "google") {
@@ -87,7 +100,7 @@ export const authConfig: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
-  secret: AUTH_SECRET,
+  secret: hasAuthSecret ? AUTH_SECRET : undefined,
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
