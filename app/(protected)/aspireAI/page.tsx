@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { generateCopilotResponse } from '@/services/gemini'
+import ReactMarkdown from 'react-markdown'
 import { ChatMessage } from '@/types'
 
 export default function AspireAIPage() {
@@ -34,10 +34,34 @@ export default function AspireAIPage() {
     setIsProcessing(true)
     setMessages(prev => [...prev, { role: 'user', content: messageToSend }])
 
-    const aiResponse = await generateCopilotResponse(messageToSend)
-    
-    setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }])
-    setIsProcessing(false)
+    try {
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userPrompt: messageToSend }),
+      })
+
+      const data = await response.json()
+      
+      if (!response.ok) {
+        const errorMsg = data.error || data.details || 'Failed to get response'
+        console.error('API Error:', data)
+        throw new Error(errorMsg)
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: data.text }])
+    } catch (error) {
+      console.error('Error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Error: Unable to connect to the intelligence service. Please try again later.'
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: errorMessage
+      }])
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
@@ -92,7 +116,25 @@ export default function AspireAIPage() {
                 ? 'bg-primary text-white rounded-tr-none' 
                 : 'bg-gray-100 text-gray-900 rounded-tl-none'
               }`}>
-                {m.content}
+                {m.role === 'user' ? (
+                  m.content
+                ) : (
+                  <div className="markdown-content">
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-1.5 last:mb-0 leading-relaxed">{children}</p>,
+                        ul: ({ children }) => <ul className="list-disc list-inside mb-1.5 last:mb-0 space-y-0.5">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-inside mb-1.5 last:mb-0 space-y-0.5">{children}</ol>,
+                        li: ({ children }) => <li className="ml-0">{children}</li>,
+                        strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                        em: ({ children }) => <em className="italic">{children}</em>,
+                        code: ({ children }) => <code className="bg-gray-200 px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
+                      }}
+                    >
+                      {m.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
               </div>
             </div>
           ))}
