@@ -34,3 +34,4 @@ pages.old.backup/
 .next/
 .vite/
 service-account-key.json
+.env
