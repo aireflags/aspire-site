@@ -161,5 +161,25 @@ export const ENTERPRISE_TOOLS: ToolItem[] = [
     bgClass: 'bg-blue-500/10',
     url: 'https://calendly.com',
     iconUrl: getFaviconUrl('https://calendly.com')
+  },
+  {
+    id: 'wiseagent',
+    title: 'WiseAgent',
+    subtitle: 'Real Estate Platform',
+    icon: 'link',
+    colorClass: 'text-blue-500',
+    bgClass: 'bg-blue-500/10',
+    url: 'https://wiseagent.com/',
+    iconUrl: getFaviconUrl('https://wiseagent.com/')
+  },
+  {
+    id: 'canvapro',
+    title: 'CanvaPro',
+    subtitle: 'Design Platform',
+    icon: 'palette',
+    colorClass: 'text-purple-500',
+    bgClass: 'bg-purple-500/10',
+    url: 'https://www.canva.com/canva-business/',
+    iconUrl: getFaviconUrl('https://www.canva.com/canva-business/')
   }
 ];
