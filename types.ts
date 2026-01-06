@@ -6,6 +6,8 @@ export interface ToolItem {
   icon: string;
   colorClass: string;
   bgClass: string;
+  url?: string;
+  iconUrl?: string;
 }
 
 export interface ChatMessage {

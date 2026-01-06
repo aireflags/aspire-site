@@ -34,34 +34,17 @@ export default function AspireAIPage() {
     setIsProcessing(true)
     setMessages(prev => [...prev, { role: 'user', content: messageToSend }])
 
-    try {
-      const response = await fetch('/api/gemini', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userPrompt: messageToSend }),
-      })
-
-      const data = await response.json()
-      
-      if (!response.ok) {
-        const errorMsg = data.error || data.details || 'Failed to get response'
-        console.error('API Error:', data)
-        throw new Error(errorMsg)
-      }
-
-      setMessages(prev => [...prev, { role: 'assistant', content: data.text }])
-    } catch (error) {
-      console.error('Error:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Error: Unable to connect to the intelligence service. Please try again later.'
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: errorMessage
-      }])
-    } finally {
+    // Simulate AI response (you can replace this with your own AI service)
+    setTimeout(() => {
+      const responses = [
+        "I understand your question. This is a placeholder response. You can integrate your preferred AI service here.",
+        "Thank you for your inquiry. This feature is currently using a placeholder response.",
+        "I'm here to help! This is a demo response. Please configure your AI service to enable full functionality."
+      ]
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)]
+      setMessages(prev => [...prev, { role: 'assistant', content: randomResponse }])
       setIsProcessing(false)
-    }
+    }, 1000)
   }
 
   return (

@@ -1,16 +1,6 @@
 'use client'
 
-import { signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-
 export default function SettingsPage() {
-  const router = useRouter()
-
-  const handleLogout = async () => {
-    await signOut({ redirect: false })
-    router.push('/welcome')
-  }
-
   return (
     <main className="flex-1 overflow-y-auto pb-20">
       <div className="p-6 bg-white">
@@ -32,12 +22,6 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
-        <button 
-          onClick={handleLogout}
-          className="w-full mt-8 p-4 rounded-xl border border-red-500/50 text-red-500 font-bold hover:bg-red-50 transition-colors"
-        >
-          Log Out
-        </button>
       </div>
     </main>
   )
