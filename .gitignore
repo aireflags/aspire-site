@@ -30,4 +30,4 @@ index.tsx.old.backup
 components.old.backup/
 pages.old.backup/
 .next/
-.vite/
+.vite/.env
