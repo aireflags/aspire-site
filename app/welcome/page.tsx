@@ -30,7 +30,7 @@ function WelcomeContent() {
         }
       } catch (err) {
         console.error('Failed to check config:', err)
-        setConfigStatus({ isValid, loading: false })
+        setConfigStatus({ isValid: false, loading: false })
       }
     }
 
