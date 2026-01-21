@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { handleGoogleSignIn } from './actions'
 
 function WelcomeContent() {
   const searchParams = useSearchParams()
@@ -9,18 +10,19 @@ function WelcomeContent() {
   const callbackUrl = searchParams.get('callbackUrl') || '/home'
   const error = searchParams.get('error')
   const [configStatus, setConfigStatus] = useState<{ isValid: boolean; loading: boolean }>({ isValid: false, loading: true })
-  
-  // 检查配置状态
+  const [isSigningIn, setIsSigningIn] = useState(false)
+
+  // Check configuration status
   useEffect(() => {
     async function checkConfig() {
       try {
         const response = await fetch('/api/auth/providers')
         const data = await response.json()
         const isValid = data.status === 'ok' && data.allSet
-        
+
         setConfigStatus({ isValid, loading: false })
-        
-        // 如果配置已正确，但 URL 中仍有 Configuration 错误，清除错误参数
+
+        // Clear Configuration error if config is now valid
         if (isValid && error === 'Configuration') {
           const newUrl = new URL(window.location.href)
           newUrl.searchParams.delete('error')
@@ -28,15 +30,23 @@ function WelcomeContent() {
         }
       } catch (err) {
         console.error('Failed to check config:', err)
-        setConfigStatus({ isValid: false, loading: false })
+        setConfigStatus({ isValid, loading: false })
       }
     }
-    
+
     checkConfig()
   }, [error, router])
-  
-  // 直接使用链接，这是最可靠的方式
-  const signInUrl = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
+
+  // Handle sign-in button click
+  const handleSignIn = async () => {
+    setIsSigningIn(true)
+    try {
+      await handleGoogleSignIn(callbackUrl)
+    } catch (err) {
+      console.error('Sign in error:', err)
+      setIsSigningIn(false)
+    }
+  }
 
   // 错误消息映射
   const errorMessages: Record<string, string> = {
@@ -73,9 +83,10 @@ function WelcomeContent() {
           </div>
         )}
 
-        <a
-          href={signInUrl}
-          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-colors shadow-sm no-underline"
+        <button
+          onClick={handleSignIn}
+          disabled={isSigningIn}
+          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -95,8 +106,10 @@ function WelcomeContent() {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          <span className="text-gray-900 font-semibold">使用 Google 登录</span>
-        </a>
+          <span className="text-gray-900 font-semibold">
+            {isSigningIn ? '正在登录...' : '使用 Google 登录'}
+          </span>
+        </button>
 
         <p className="text-sm text-gray-400 mt-4">
           使用 Google 账户登录（支持 Gmail 和企业邮箱）

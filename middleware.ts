@@ -1,6 +1,5 @@
-import { auth } from "./auth"
+import { auth } from "@/auth"
 import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
 
 const protectedRoutes = ["/home", "/aspireAI", "/offerMaker", "/settings"]
 
@@ -8,21 +7,22 @@ export default auth((req) => {
   const { pathname } = req.nextUrl
   const isAuthenticated = !!req.auth
 
-  // 检查是否为受保护的路由
-  const isProtectedRoute = protectedRoutes.some(route => 
+  // Check if this is a protected route
+  const isProtectedRoute = protectedRoutes.some(route =>
     pathname === route || pathname.startsWith(`${route}/`)
   )
 
   if (isProtectedRoute && !isAuthenticated) {
-    // 未登录用户重定向到 welcome 页面
+    // Redirect unauthenticated users to welcome page
     const welcomeUrl = new URL("/welcome", req.url)
     welcomeUrl.searchParams.set("callbackUrl", pathname)
     return NextResponse.redirect(welcomeUrl)
   }
 
-  // 如果已登录用户访问 welcome 页面，重定向到 home
+  // If authenticated user visits welcome page, redirect to callback or home
   if (pathname === "/welcome" && isAuthenticated) {
-    return NextResponse.redirect(new URL("/home", req.url))
+    const callbackUrl = req.nextUrl.searchParams.get("callbackUrl") || "/home"
+    return NextResponse.redirect(new URL(callbackUrl, req.url))
   }
 
   return NextResponse.next()
