@@ -1,10 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { handleGoogleSignIn } from './actions'
 
 export default function WelcomePage() {
+  return (
+    <Suspense fallback={<WelcomeFallback />}>
+      <WelcomeContent />
+    </Suspense>
+  )
+}
+
+function WelcomeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/home'
@@ -114,6 +122,16 @@ export default function WelcomePage() {
         <p className="text-sm text-gray-400 mt-4">
           使用 Google 账户登录（支持 Gmail 和企业邮箱）
         </p>
+      </div>
+    </div>
+  )
+}
+
+function WelcomeFallback() {
+  return (
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 max-w-md mx-auto items-center justify-center px-6">
+      <div className="text-center">
+        <p className="text-gray-500">Loading...</p>
       </div>
     </div>
   )
