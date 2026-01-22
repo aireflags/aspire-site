@@ -9,7 +9,6 @@ export default function AspireAIPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const chatEndRef = useRef<HTMLDivElement>(null)
-  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const commonQuestions = [
     "How is the brokerage structured?",
@@ -24,7 +23,7 @@ export default function AspireAIPage() {
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, isProcessing])
 
   const handleSend = async (question?: string) => {
     const messageToSend = question || input.trim()
@@ -34,21 +33,49 @@ export default function AspireAIPage() {
     setIsProcessing(true)
     setMessages(prev => [...prev, { role: 'user', content: messageToSend }])
 
-    // Simulate AI response (you can replace this with your own AI service)
-    setTimeout(() => {
-      const responses = [
-        "I understand your question. This is a placeholder response. You can integrate your preferred AI service here.",
-        "Thank you for your inquiry. This feature is currently using a placeholder response.",
-        "I'm here to help! This is a demo response. Please configure your AI service to enable full functionality."
-      ]
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)]
-      setMessages(prev => [...prev, { role: 'assistant', content: randomResponse }])
+    try {
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: messageToSend })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        const errorMessage =
+          typeof data?.error === 'string' && data.error.trim().length > 0
+            ? data.error.trim()
+            : 'Error: Unable to connect to the intelligence service. Please try again later.'
+        setMessages(prev => [...prev, { role: 'assistant', content: errorMessage }])
+        return
+      }
+
+      const aiResponse =
+        typeof data?.text === 'string' && data.text.trim().length > 0
+          ? data.text.trim()
+          : 'Sorry, I could not generate a response.'
+
+      setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }])
+    } catch (error) {
+      console.error(error)
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          content:
+            'Error: Unable to connect to the intelligence service. Please try again later.'
+        }
+      ])
+    } finally {
       setIsProcessing(false)
-    }, 1000)
+    }
   }
 
   return (
-    <main className="flex-1 overflow-y-auto pb-20">
+    <main className="flex-1 overflow-y-auto pb-20 bg-white">
       <div className="flex flex-col">
         {/* Header - Greeting and Notification */}
         <header className="flex items-center justify-between p-4 pb-2 bg-white sticky top-0 z-10 backdrop-blur-sm border-b border-gray-200">
@@ -70,7 +97,6 @@ export default function AspireAIPage() {
 
         {/* Main Content - Chat Messages */}
         <div 
-          ref={messagesContainerRef}
           className="px-4 py-4 pb-32 space-y-4"
         >
           {messages.length === 0 && (

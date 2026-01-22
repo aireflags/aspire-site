@@ -73,7 +73,7 @@ function WelcomeContent() {
       <div className="text-center space-y-6 w-full">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome to Aspire Homes
+            Welcome to Aspire Homes Portal
           </h1>
           <p className="text-gray-500">
             Sign in with your company email to continue
