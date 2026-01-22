@@ -20,3 +20,4 @@ View your app in AI Studio: https://ai.studio/apps/drive/1JbGrfFRxUzsyuSVaqfpg_I
    `npm run dev`
 
 ## aspirehomesrealty.com
+preview trigger
