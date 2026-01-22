@@ -1,9 +1,17 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { ENTERPRISE_TOOLS } from '@/constants'
 import ToolCard from '../../components/ToolCard'
 
 export default function HomePage() {
+  const { data: session } = useSession()
+  const displayName =
+    session?.user?.name ||
+    session?.user?.email?.split('@')[0] ||
+    'there'
+  const avatarUrl = session?.user?.image || 'https://picsum.photos/seed/alex/100/100'
+
   return (
     <main className="flex-1 overflow-y-auto pb-20">
       <div className="flex flex-col">
@@ -12,11 +20,11 @@ export default function HomePage() {
           <div className="flex items-center gap-4">
             <div 
               className="bg-center bg-no-repeat bg-cover rounded-full size-12 border-2 border-gray-200" 
-              style={{ backgroundImage: 'url("https://picsum.photos/seed/alex/100/100")' }}
+              style={{ backgroundImage: `url("${avatarUrl}")` }}
             />
             <div className="flex flex-col">
-              <h2 className="text-gray-900 text-lg font-bold leading-tight">Good morning, Liz</h2>
-              <p className="text-gray-500 text-sm font-medium">Newbie Agent</p>
+              <h2 className="text-gray-900 text-lg font-bold leading-tight">Good morning, {displayName}</h2>
+              <p className="text-gray-500 text-sm font-medium">aspire home</p>
             </div>
           </div>
           <button className="flex items-center justify-center rounded-full size-10 hover:bg-gray-100 transition-colors relative">

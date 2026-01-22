@@ -19,8 +19,8 @@ export const ENTERPRISE_TOOLS: ToolItem[] = [
     icon: 'link',
     colorClass: 'text-blue-500',
     bgClass: 'bg-blue-500/10',
-    url: 'https://aireflags.larksuite.com/drive/home',
-    iconUrl: getFaviconUrl('https://aireflags.larksuite.com/drive/home')
+    url: 'https://z1wxnr4c1l.sg.larksuite.com/wiki/PebSwDggQiJubXkPorglWkQ6gnf',
+    iconUrl: getFaviconUrl('https://www.larksuite.com/en_sg/')
   },
   {
     id: 'files',
