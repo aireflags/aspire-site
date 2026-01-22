@@ -1,13 +1,30 @@
 import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { auth } from "@/auth"
 
-export function middleware(req: NextRequest) {
-  // 移除所有认证检查，允许直接访问所有页面
-  // 如果访问根路径，重定向到 home
-  if (req.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/home', req.url))
+const protectedRoutes = ["/home", "/aspireAI", "/offerMaker", "/settings"]
+
+export default auth((req) => {
+  const { pathname } = req.nextUrl
+  const isAuthenticated = !!req.auth
+
+  // Check if this is a protected route
+  const isProtectedRoute = protectedRoutes.some(route =>
+    pathname === route || pathname.startsWith(`${route}/`)
+  )
+
+  if (isProtectedRoute && !isAuthenticated) {
+    // Redirect unauthenticated users to welcome page
+    const welcomeUrl = new URL("/welcome", req.url)
+    welcomeUrl.searchParams.set("callbackUrl", pathname)
+    return NextResponse.redirect(welcomeUrl)
   }
-  
+
+  // If authenticated user visits welcome page, redirect to callback or home
+  if (pathname === "/welcome" && isAuthenticated) {
+    const callbackUrl = req.nextUrl.searchParams.get("callbackUrl") || "/home"
+    return NextResponse.redirect(new URL(callbackUrl, req.url))
+  }
+
   return NextResponse.next()
 }
 
