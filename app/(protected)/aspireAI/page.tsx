@@ -11,10 +11,8 @@ export default function AspireAIPage() {
   const chatEndRef = useRef<HTMLDivElement>(null)
 
   const commonQuestions = [
-    "How is the brokerage structured?",
-    "Can you walk me through the full transaction process from first contact to closing?",
-    "What does the onboarding and training timeline look like?",
-    "Which CRM systems are mandatory?"
+    "Who should pay for transfer tax in Santa Clara county?",
+    "I made a non contingent offer but found that seller didn't disclose an unpermitted room addition, can we cancel the contract and get EMD back?"
   ]
 
   const scrollToBottom = () => {
