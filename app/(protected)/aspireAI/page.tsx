@@ -2,13 +2,20 @@
 
 import { useState, useRef, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { useSession } from 'next-auth/react'
 import { ChatMessage } from '@/types'
 
 export default function AspireAIPage() {
+  const { data: session } = useSession()
   const [input, setInput] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const displayName =
+    session?.user?.name ||
+    session?.user?.email?.split('@')[0] ||
+    'there'
+  const avatarUrl = session?.user?.image || 'https://picsum.photos/seed/alex/100/100'
 
   const commonQuestions = [
     "Who should pay for transfer tax in Santa Clara county?",
@@ -80,11 +87,11 @@ export default function AspireAIPage() {
           <div className="flex items-center gap-4">
             <div 
               className="bg-center bg-no-repeat bg-cover rounded-full size-12 border-2 border-gray-200" 
-              style={{ backgroundImage: 'url("https://picsum.photos/seed/alex/100/100")' }}
+              style={{ backgroundImage: `url("${avatarUrl}")` }}
             />
             <div className="flex flex-col">
-              <h2 className="text-gray-900 text-lg font-bold leading-tight">Good morning, Liz</h2>
-              <p className="text-gray-500 text-sm font-medium">Newbie Agent</p>
+              <h2 className="text-gray-900 text-lg font-bold leading-tight">Good morning, {displayName}</h2>
+              <p className="text-gray-500 text-sm font-medium">AspireAI</p>
             </div>
           </div>
           <button className="flex items-center justify-center rounded-full size-10 hover:bg-gray-100 transition-colors relative">
