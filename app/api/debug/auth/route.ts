@@ -10,14 +10,14 @@ export async function GET() {
     configuration: {
       baseUrl,
       basePath,
-      callbackUrl: `${baseUrl}${basePath}/callback/google`,
-      signInUrl: `${baseUrl}${basePath}/signin/google`,
-      expectedGoogleConsoleRedirectURI: `${baseUrl}${basePath}/callback/google`,
+      callbackUrl: `${baseUrl}${basePath}/callback/lark`,
+      signInUrl: `${baseUrl}${basePath}/signin/lark`,
+      expectedLarkRedirectUrl: `${baseUrl}${basePath}/callback/lark`,
     },
     instructions: {
-      step1: 'Go to https://console.cloud.google.com/apis/credentials',
-      step2: 'Select your OAuth 2.0 Client ID',
-      step3: 'Under "Authorized redirect URIs", add the callbackUrl shown above',
+      step1: 'Open the app in the Lark Developer Console',
+      step2: 'Go to Development Configuration > Security Settings',
+      step3: 'Add the exact callbackUrl shown above to Redirect URLs',
       step4: 'Save and restart your dev server',
     }
   })

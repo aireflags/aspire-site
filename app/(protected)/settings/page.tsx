@@ -1,6 +1,16 @@
 'use client'
 
+import { useState } from 'react'
+import { signOut } from 'next-auth/react'
+
 export default function SettingsPage() {
+  const [isSigningOut, setIsSigningOut] = useState(false)
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true)
+    await signOut({ redirectTo: '/welcome' })
+  }
+
   return (
     <main className="flex-1 overflow-y-auto pb-20">
       <div className="p-6 bg-white">
@@ -22,6 +32,14 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={handleSignOut}
+          disabled={isSigningOut}
+          className="w-full mt-8 p-4 rounded-xl border border-red-500/50 text-red-600 font-bold hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSigningOut ? 'Signing out...' : 'Log Out'}
+        </button>
       </div>
     </main>
   )
