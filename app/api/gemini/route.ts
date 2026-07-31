@@ -1,7 +1,8 @@
 import { GoogleGenAI } from '@google/genai'
 import { NextResponse } from 'next/server'
 
-const GEMINI_MODEL = 'gemini-2.5-flash'
+const GEMINI_MODEL =
+  process.env.GEMINI_MODEL?.trim() || 'gemini-3.6-flash'
 
 export async function POST(request: Request) {
   const useVertex =
