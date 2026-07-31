@@ -35,3 +35,6 @@ Auth.js. Google Gemini remains the AI provider and is independent of login.
 
 See [docs/LARK_AUTH_SETUP.md](docs/LARK_AUTH_SETUP.md) for Lark console,
 access-control, testing, and Vercel instructions.
+
+For moving this login implementation into another application, see
+[docs/LARK_LOGIN_MIGRATION_HANDOFF.md](docs/LARK_LOGIN_MIGRATION_HANDOFF.md).
