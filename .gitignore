@@ -33,5 +33,6 @@ components.old.backup/
 pages.old.backup/
 .next/
 .vite/
+*.tsbuildinfo
 service-account-key.json
 .env

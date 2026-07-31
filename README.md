@@ -1,23 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Aspire Homes Portal
 
-# Run and deploy your AI Studio app
+Internal Next.js portal for Aspire Homes. Authentication uses Lark OAuth through
+Auth.js. Google Gemini remains the AI provider and is independent of login.
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1JbGrfFRxUzsyuSVaqfpg_ISU1WtdOgBk
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
+## Local setup
 
 1. Install dependencies:
-   `npm install`
-2. Set the Variables in [.env.example](.env.example) using Vertex AI API key
-3. Run the app:
-   `npm run dev`
 
-## aspirehomesrealty.com
-preview trigger
+   ```bash
+   npm install
+   ```
+
+2. Copy `.env.example` to `.env.local` and configure:
+
+   ```dotenv
+   AUTH_SECRET=<random secret>
+   LARK_CLIENT_ID=<Lark App ID>
+   LARK_CLIENT_SECRET=<Lark App Secret>
+   ```
+
+3. Register this exact development redirect URL in the Lark Developer Console:
+
+   ```text
+   http://localhost:3000/api/auth/callback/lark
+   ```
+
+4. Start the application:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open `http://localhost:3000/welcome`.
+
+See [docs/LARK_AUTH_SETUP.md](docs/LARK_AUTH_SETUP.md) for Lark console,
+access-control, testing, and Vercel instructions.

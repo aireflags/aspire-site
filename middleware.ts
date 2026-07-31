@@ -21,7 +21,12 @@ export default auth((req) => {
 
   // If authenticated user visits welcome page, redirect to callback or home
   if (pathname === "/welcome" && isAuthenticated) {
-    const callbackUrl = req.nextUrl.searchParams.get("callbackUrl") || "/home"
+    const requestedCallback =
+      req.nextUrl.searchParams.get("callbackUrl") || "/home"
+    const callbackUrl =
+      requestedCallback.startsWith("/") && !requestedCallback.startsWith("//")
+        ? requestedCallback
+        : "/home"
     return NextResponse.redirect(new URL(callbackUrl, req.url))
   }
 

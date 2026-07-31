@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 export async function GET(request: NextRequest) {
   try {
     // Use the programmatic signIn function
-    await signIn("google", {
+    await signIn("lark", {
       redirectTo: "/home",
     })
 
