@@ -10,15 +10,21 @@ export async function GET() {
     configuration: {
       baseUrl,
       basePath,
-      callbackUrl: `${baseUrl}${basePath}/callback/lark`,
-      signInUrl: `${baseUrl}${basePath}/signin/lark`,
-      expectedLarkRedirectUrl: `${baseUrl}${basePath}/callback/lark`,
+      providers: {
+        lark: {
+          callbackUrl: `${baseUrl}${basePath}/callback/lark`,
+          signInUrl: `${baseUrl}${basePath}/signin/lark`,
+        },
+        google: {
+          callbackUrl: `${baseUrl}${basePath}/callback/google`,
+          signInUrl: `${baseUrl}${basePath}/signin/google`,
+        },
+      },
     },
     instructions: {
-      step1: 'Open the app in the Lark Developer Console',
-      step2: 'Go to Development Configuration > Security Settings',
-      step3: 'Add the exact callbackUrl shown above to Redirect URLs',
-      step4: 'Save and restart your dev server',
+      lark: 'Add the exact Lark callbackUrl to Lark Developer Console > Development Configuration > Security Settings.',
+      google: 'Add the exact Google callbackUrl to Google Cloud Console > OAuth client > Authorized redirect URIs.',
+      final: 'Save the provider settings and restart your development server.',
     }
   })
 }

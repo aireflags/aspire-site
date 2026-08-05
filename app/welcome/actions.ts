@@ -2,13 +2,18 @@
 
 import { signIn } from "@/auth"
 
-export async function handleLarkSignIn(callbackUrl: string = "/home") {
+export type SignInProvider = "lark" | "google"
+
+export async function handleProviderSignIn(
+  provider: SignInProvider,
+  callbackUrl: string = "/home",
+) {
   const redirectTo =
     callbackUrl.startsWith("/") && !callbackUrl.startsWith("//")
       ? callbackUrl
       : "/home"
 
-  await signIn("lark", {
+  await signIn(provider, {
     redirectTo,
   })
 }

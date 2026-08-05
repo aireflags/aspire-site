@@ -5,6 +5,7 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string
       tenantKey?: string
+      provider?: "lark" | "google"
     }
   }
 }
@@ -13,5 +14,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id?: string
     tenantKey?: string
+    provider?: string
   }
 }
